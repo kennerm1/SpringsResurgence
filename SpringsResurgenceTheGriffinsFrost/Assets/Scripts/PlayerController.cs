@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public int maxHp;
     public bool dead;
     public int item;
+    public HeaderInfo headerInfo;
 
     [SerializeField] AudioClip[] _clips;
 
@@ -111,6 +112,7 @@ public class PlayerController : MonoBehaviour
         curHp = Mathf.Clamp(curHp + amountToHeal, 0, maxHp);
         // update the health bar
         //headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
+        headerInfo.UpdateHealthBar(curHp);
     }
 
     public void GiveItem(int itemToGive)
