@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public int maxHp;
     public bool dead;
     public int item;
-    public HeaderInfo headerInfo;
+    public HealthBar healthBar;
 
     [SerializeField] AudioClip[] _clips;
 
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        healthBar.SetMaxHealth(maxHp);
     }
 
     private void Update()
@@ -99,9 +101,11 @@ public class PlayerController : MonoBehaviour
         // did we hit an enemy?
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
         {
+            //Debug.Log("owo");
             // get the enemy and damage them
             Enemy enemy = hit.collider.GetComponent<Enemy>();
             //enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
+            enemy.TakeDamage(damage);
         }
         // play attack animation
         anim.SetTrigger("Attack");
@@ -111,8 +115,7 @@ public class PlayerController : MonoBehaviour
     {
         curHp = Mathf.Clamp(curHp + amountToHeal, 0, maxHp);
         // update the health bar
-        //headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
-        headerInfo.UpdateHealthBar(curHp);
+        healthBar.SetHealth(curHp);
     }
 
     public void GiveItem(int itemToGive)
@@ -121,6 +124,43 @@ public class PlayerController : MonoBehaviour
 
         // update the ui
         GameUI.instance.UpdateItemText(item);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        curHp -= damage;
+        // update the health bar
+        //Debug.Log("ur mom");
+        healthBar.SetHealth(curHp);
+        if (curHp <= 0)
+            Die();
+        else
+        {
+            FlashDamage();
+        }
+    }
+
+    void FlashDamage()
+    {
+        StartCoroutine(DamageFlash());
+        IEnumerator DamageFlash()
+        {
+            sprite.color = Color.red;
+            yield return new WaitForSeconds(0.05f);
+            sprite.color = Color.white;
+        }
+    }
+
+    private void Die()
+    {
+        rb.bodyType = RigidbodyType2D.Static;
+        Destroy(gameObject);
+        RestartLevel();
+    }
+
+    private void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     /*private void OnMouseDown()
