@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Boss : MonoBehaviour
 {
     [Header("Info")]
     public float moveSpeed;
@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
             // if we're able to attack, do so
             if (dist < attackRange && Time.time - lastAttackTime >= attackRate)
             {
-                Debug.Log("die unity");
+                //Debug.Log("die unity");
                 Attack();
             }
 
@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
     // attacks the targeted player
     void Attack()
     {
-        Debug.Log("boop");
+        //Debug.Log("boop");
         lastAttackTime = Time.time;
         targetPlayer.TakeDamage(damage);
     }
@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         if (objectToSpawnOnDeath != null)
-           Instantiate(objectToSpawnOnDeath, transform.position, Quaternion.identity);
+            Instantiate(objectToSpawnOnDeath, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 

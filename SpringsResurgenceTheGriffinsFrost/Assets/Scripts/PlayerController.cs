@@ -101,11 +101,16 @@ public class PlayerController : MonoBehaviour
         // did we hit an enemy?
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
         {
-            //Debug.Log("owo");
             // get the enemy and damage them
             Enemy enemy = hit.collider.GetComponent<Enemy>();
             //enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
             enemy.TakeDamage(damage);
+        }
+        else if (hit.collider != null && hit.collider.gameObject.CompareTag("Boss"))
+        {
+            //Debug.Log("yo mama");
+            Boss boss = hit.collider.GetComponent<Boss>();
+            boss.TakeDamage(damage);
         }
         // play attack animation
         anim.SetTrigger("Attack");
@@ -130,7 +135,6 @@ public class PlayerController : MonoBehaviour
     {
         curHp -= damage;
         // update the health bar
-        //Debug.Log("ur mom");
         healthBar.SetHealth(curHp);
         if (curHp <= 0)
             Die();
