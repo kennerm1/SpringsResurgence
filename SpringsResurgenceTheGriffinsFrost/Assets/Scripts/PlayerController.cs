@@ -27,7 +27,14 @@ public class PlayerController : MonoBehaviour
     public int item;
     public HealthBar healthBar;
 
-    [SerializeField] AudioClip[] _clips;
+    [SerializeField] AudioClip[] clips;
+
+    private void OnMouseDown()
+    {
+        int index = UnityEngine.Random.Range(0, clips.Length);
+        AudioClip clip = clips[index];
+        GetComponent<AudioSource>().PlayOneShot(clip);
+    }
 
     private void Start()
     {
@@ -137,7 +144,9 @@ public class PlayerController : MonoBehaviour
         // update the health bar
         healthBar.SetHealth(curHp);
         if (curHp <= 0)
+        { 
             Die();
+        }
         else
         {
             FlashDamage();
@@ -157,6 +166,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
+        Debug.Log("OwO");
         rb.bodyType = RigidbodyType2D.Static;
         Destroy(gameObject);
         RestartLevel();

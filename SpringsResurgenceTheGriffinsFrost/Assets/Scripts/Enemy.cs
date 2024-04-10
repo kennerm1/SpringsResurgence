@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     private float lastPlayerDetectTime;
 
     public GameObject objectToSpawnOnDeath;
+    public GameObject enemy;
 
     [Header("Attack")]
     public int damage;
@@ -30,6 +31,7 @@ public class Enemy : MonoBehaviour
     public HealthBar healthBar;
     public SpriteRenderer sr;
     public Rigidbody2D rig;
+    [SerializeField] AudioClip[] clips;
 
     void Start()
     {
@@ -86,6 +88,9 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        int index = UnityEngine.Random.Range(0, clips.Length);
+        AudioClip clip = clips[index];
+        GetComponent<AudioSource>().PlayOneShot(clip);
         curHp -= damage;
         // update the health bar
         healthBar.SetHealth(curHp);
@@ -112,6 +117,23 @@ public class Enemy : MonoBehaviour
     {
         if (objectToSpawnOnDeath != null)
            Instantiate(objectToSpawnOnDeath, transform.position, Quaternion.identity);
+        gameObject.SetActive(false);
+
+        /*StartCoroutine(EnemyRespawn());
+        IEnumerator EnemyRespawn()
+        {
+            yield return new WaitForSeconds(10);
+            Respawn();
+        }*/
+        Invoke("Respawn", 2);
+    }
+
+    void Respawn()
+    {
+        GameObject enemyClone = (GameObject)Instantiate(enemy);
+        enemyClone.transform.position = transform.position;
+        enemyClone.SetActive(true);
+
         Destroy(gameObject);
     }
 

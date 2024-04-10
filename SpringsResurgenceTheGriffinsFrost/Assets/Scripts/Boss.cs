@@ -30,6 +30,7 @@ public class Boss : MonoBehaviour
     public HealthBar healthBar;
     public SpriteRenderer sr;
     public Rigidbody2D rig;
+    [SerializeField] AudioClip[] clips;
 
     void Start()
     {
@@ -86,6 +87,9 @@ public class Boss : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        int index = UnityEngine.Random.Range(0, clips.Length);
+        AudioClip clip = clips[index];
+        GetComponent<AudioSource>().PlayOneShot(clip);
         curHp -= damage;
         // update the health bar
         healthBar.SetHealth(curHp);
