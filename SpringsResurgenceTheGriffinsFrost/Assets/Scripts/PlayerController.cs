@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour
     public float attackRange;
     public float attackRate;
     private float lastAttackTime;
-    public int curHp;
-    public int maxHp;
+    public int playerCurHp;
+    public int playerMaxHp;
     public bool dead;
     public int item;
     public HealthBar healthBar;
@@ -43,8 +43,8 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        healthBar.SetMaxHealth(maxHp);
-        curHp = maxHp;
+        healthBar.SetMaxHealth(playerMaxHp);
+        playerCurHp = playerMaxHp;
 
     }
 
@@ -128,9 +128,9 @@ public class PlayerController : MonoBehaviour
 
     public void Heal(int amountToHeal)
     {
-        curHp = Mathf.Clamp(curHp + amountToHeal, 0, maxHp);
+        playerCurHp = Mathf.Clamp(playerCurHp + amountToHeal, 0, playerMaxHp);
         // update the health bar
-        healthBar.SetHealth(curHp);
+        healthBar.SetHealth(playerCurHp);
     }
 
     public void GiveItem(int itemToGive)
@@ -143,13 +143,13 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("HP before damage: " + curHp);
-        curHp -= damage;
+        Debug.Log("HP before damage: " + playerCurHp);
+        playerCurHp -= damage;
         // update the health bar
-        healthBar.SetHealth(curHp);
+        healthBar.SetHealth(playerCurHp);
         Debug.Log(damage + " damage taken");
-        Debug.Log(curHp + " hp remaining");
-        if (curHp <= 0)
+        Debug.Log(playerCurHp + " hp remaining");
+        if (playerCurHp <= 0)
         {
             Debug.Log("Death");
             Die();
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
         {
             FlashDamage();
         }
-        curHp = Mathf.Clamp(curHp, 0, maxHp);
+        playerCurHp = Mathf.Clamp(playerCurHp, 0, playerMaxHp);
     }
 
     void FlashDamage()
