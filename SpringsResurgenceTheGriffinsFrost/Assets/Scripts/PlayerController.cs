@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool dead;
     public int item;
     public HealthBar healthBar;
+    
 
     [SerializeField] AudioClip[] clips;
 
@@ -43,6 +44,8 @@ public class PlayerController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         healthBar.SetMaxHealth(maxHp);
+        curHp = maxHp;
+
     }
 
     private void Update()
@@ -140,17 +143,22 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("HP before damage: " + curHp);
         curHp -= damage;
         // update the health bar
         healthBar.SetHealth(curHp);
+        Debug.Log(damage + " damage taken");
+        Debug.Log(curHp + " hp remaining");
         if (curHp <= 0)
-        { 
+        {
+            Debug.Log("Death");
             Die();
         }
         else
         {
             FlashDamage();
         }
+        curHp = Mathf.Clamp(curHp, 0, maxHp);
     }
 
     void FlashDamage()
@@ -166,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("OwO");
+        //Debug.Log("OwO");
         rb.bodyType = RigidbodyType2D.Static;
         Destroy(gameObject);
         RestartLevel();

@@ -15,12 +15,13 @@ public class Enemy : MonoBehaviour
     public float attackRange;
 
     public PlayerController targetPlayer;
+    //public GameObject player;
 
     public float playerDetectRate = 0.2f;
     private float lastPlayerDetectTime;
 
     public GameObject objectToSpawnOnDeath;
-    public GameObject enemy;
+    //public GameObject enemy;
 
     [Header("Attack")]
     public int damage;
@@ -73,8 +74,9 @@ public class Enemy : MonoBehaviour
     // attacks the targeted player
     void Attack()
     {
-        Debug.Log("boop");
+        Debug.Log("Attack for " + damage + " damage");
         lastAttackTime = Time.time;
+        Debug.Log("Player takes damage");
         targetPlayer.TakeDamage(damage);
     }
 
@@ -125,16 +127,16 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(10);
             Respawn();
         }*/
-        Invoke("Respawn", 2);
+        //Invoke("Respawn", 2);
     }
 
-    void Respawn()
+    /*void Respawn()
     {
         GameObject enemyClone = (GameObject)Instantiate(enemy);
         enemyClone.transform.position = transform.position;
         enemyClone.SetActive(true);
 
         Destroy(gameObject);
-    }
+    }*/
 
 }

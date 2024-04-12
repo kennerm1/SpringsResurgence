@@ -106,7 +106,7 @@ MonoBehaviour:
   maxHp: 200
   chaseRange: 0
   attackRange: 5
-  targetPlayer: {fileID: 0}
+  targetPlayer: {fileID: 6083491788218652916, guid: 48f403ae8aeb2a447bb08f3bc240adc6, type: 3}
   playerDetectRate: 0.2
   objectToSpawnOnDeath: {fileID: 0}
   damage: 15
