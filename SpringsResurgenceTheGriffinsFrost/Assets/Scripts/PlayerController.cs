@@ -122,6 +122,12 @@ public class PlayerController : MonoBehaviour
             Boss boss = hit.collider.GetComponent<Boss>();
             boss.TakeDamage(damage);
         }
+        else if (hit.collider != null && hit.collider.gameObject.CompareTag("hsuB"))
+        {
+            //Debug.Log("hsuB");
+            Barrier hsub = hit.collider.GetComponent<Barrier>();
+            hsub.TakeDamage(damage);
+        }
         // play attack animation
         anim.SetTrigger("Attack");
     }
@@ -133,10 +139,10 @@ public class PlayerController : MonoBehaviour
         healthBar.SetHealth(playerCurHp);
     }
 
-    public void GiveItem(int itemToGive)
+    public void GiveItem(int itemToGive, int damageIncrease)
     {
         item += itemToGive;
-
+        damage += damageIncrease;
         // update the ui
         GameUI.instance.UpdateItemText(item);
     }

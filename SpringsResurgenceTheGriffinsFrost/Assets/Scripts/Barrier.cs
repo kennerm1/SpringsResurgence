@@ -4,28 +4,50 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
-    public GameObject hsuB;
-    public GameObject noKeys;
-    public GameObject player;
+    public SpriteRenderer sr;
+    public int curHp;
+    public int maxHp;
+    public GameObject objectToSpawnOnDeath;
+    public HealthBar healthBar;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void Start()
     {
-        Debug.Log("hsuB contact");
-        if (GetComponent<PlayerController>().item >= 4)
-        {
-            hsuB.SetActive(false);
-        }
+        healthBar.SetMaxHealth(maxHp);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        /*
+        int index = UnityEngine.Random.Range(0, clips.Length);
+        AudioClip clip = clips[index];
+        GetComponent<AudioSource>().PlayOneShot(clip);*/
+        curHp -= damage;
+        // update the health bar
+        healthBar.SetHealth(curHp);
+        if (curHp <= 0)
+            Die();
         else
         {
-            Debug.Log("No keys");
-            noKeys.SetActive(true);
-            Invoke("setBadScreen", 3.0f);
+            FlashDamage();
         }
     }
 
-    void setBadScreen()
+    void FlashDamage()
     {
-        noKeys.SetActive(false);
+        StartCoroutine(DamageFlash());
+        IEnumerator DamageFlash()
+        {
+            sr.color = Color.red;
+            yield return new WaitForSeconds(0.05f);
+            sr.color = Color.white;
+        }
+    }
+
+    void Die()
+    {
+        if (objectToSpawnOnDeath != null)
+            Instantiate(objectToSpawnOnDeath, transform.position, Quaternion.identity);
+        gameObject.SetActive(false);
     }
 
 }

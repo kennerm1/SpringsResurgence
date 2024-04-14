@@ -18,6 +18,7 @@ public class ItemCollector : MonoBehaviour
 
     public PickupType type;
     public int value;
+    public int damage;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -26,7 +27,7 @@ public class ItemCollector : MonoBehaviour
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (type == PickupType.Item)
                 //player("GiveItem", player, value);
-                player.GiveItem(value);
+                player.GiveItem(value, damage);
             else if (type == PickupType.Health)
                 //player("Heal", player, value);
                 player.Heal(value);
